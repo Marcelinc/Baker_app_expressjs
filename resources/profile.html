@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="shortcut icon" href="#"/>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="navlink"><a href="profile.html">Moje zamówienia</a></li>
+            <li class="navlink"><a href="main.html">Oferty</a></li>
+            <li class="navlink"><a href="addOrder.html">Złóż zamówienie</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Moje zamówienia</h1>
+        <section>
+            <label>
+                Produkt: <select id='produkt'>
+                    <option value="wszystkie">Wszystkie</option>
+                    <option value="chleb">Chleb</option>
+                    <option value="paczek">Pączek</option>
+                    <option value="torcik">Torcik</option>
+                </select>
+            </label>
+            <button onclick="filtruj()">Filtruj</button>
+        </section>
+        <p id='info'>Brak zlożonych zamówień</p>
+        <ul class="lista"></ul>
+    </main>
+
+    <script>
+        const lista = document.querySelector('.lista');
+        const info = document.querySelector('#info');
+        var wyswietlane='wszystkie';
+        var produkt;
+        var anulowane=false;
+
+        //pobieranie zamowien przy pierwszym odwiedzeniu strony
+        function zamowienia(){
+            lista.innerHTML='';
+            fetch(BACKEND,{
+                headers: {'Content-Type':'application/json'}
+            })
+            .then(response => response.json())
+            .then(res => {res.forEach(z => {
+                if(z.status === 'oczekujace'){
+                    const li = document.createElement('li');
+                    const tekst = document.createTextNode('Produkt: '+z.produkt+' | ilosc: '+z.ilosc+'sztk. ');
+                    li.appendChild(tekst);
+                    const button = document.createElement('button');
+                    const tekstPrzycisku = document.createTextNode('Anuluj zgłoszenie');
+                    button.appendChild(tekstPrzycisku);
+                    button.setAttribute('onclick','anuluj("ID'+z._id+'")');
+                    li.appendChild(button);
+                    lista.appendChild(li);
+                }
+                if(lista.childElementCount > 0)
+                    info.innerHTML='';
+                else info.innerHTML='Brak oczekujących zamówień';
+            }); console.log(res)});
+        }
+
+        function anuluj(id){
+            fetch(`BACKEND/${id.slice(2)}`,{
+                method:"PUT"
+            })
+            .then(response => response.json())
+            .then(res => {console.log(res); if(wyswietlane =='wszystkie') 
+                zamowienia(); else{anulowane=true; filtruj();} });
+        }
+        
+
+        function filtruj(){
+            produkt = document.querySelector('#produkt').value;
+            if(anulowane){
+                produkt=wyswietlane;
+                anulowane=false;}
+            if(produkt !== 'wszystkie')
+                fetch(`BACKEND/${produkt}`)
+                .then(response => response.json())
+                .then(res => {
+                    if(res.msg) {
+                        info.innerHTML=res.msg;
+                        lista.innerHTML='';
+                    }
+                    else {
+                        lista.innerHTML='';
+                        res.forEach(z => {
+                            if(z.status === 'oczekujace'){
+                                const li = document.createElement('li');
+                                const tekst = document.createTextNode('Produkt: '+z.produkt+' | ilosc: '+z.ilosc+'sztk. ');
+                                li.appendChild(tekst);
+                                const button = document.createElement('button');
+                                const tekstPrzycisku = document.createTextNode('Anuluj zgłoszenie');
+                                button.appendChild(tekstPrzycisku);
+                                button.setAttribute('onclick','anuluj("ID'+z._id+'")');
+                                li.appendChild(button);
+                                lista.appendChild(li);
+                            }
+                        })
+                        if(lista.childElementCount > 0)
+                            info.innerHTML='';
+                        else info.innerHTML='Brak oczekujących zamówień';
+                    }
+                    wyswietlane=produkt;
+                });
+            else {zamowienia(); wyswietlane='wszystkie';}}       
+        
+        zamowienia();
+    </script>
+</body>
+</html>

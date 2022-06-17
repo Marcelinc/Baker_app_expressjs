@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Złóż zamówienie</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="shortcut icon" href="#"/>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="navlink"><a href="profile.html">Moje zamówienia</a></li>
+            <li class="navlink"><a href="main.html">Oferty</a></li>
+            <li class="navlink"><a href="addOrder.html">Złóż zamówienie</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h3>Zamówienie</h3>
+        <form>
+            <p>Produkt:
+                <select id='produkt'>
+                    <option value="chleb">Chleb</option>
+                    <option value="paczek">Pączek</option>
+                    <option value="torcik">Torcik</option>
+                </select>
+            </p>
+            <p>Ilość: <input type='number' id='ilosc'/></p>
+            <button type='submit' onclick="zloz(event)">Zamów</button>
+            <p id='potwierdzenie'></p>
+        </form>
+    </main>
+
+    <script>
+        const potwierdzenie = document.querySelector('#potwierdzenie');
+
+        function zloz(event){
+           event.preventDefault();
+           const produkt = document.querySelector('#produkt').value;
+           const ilosc = document.querySelector('#ilosc').value;
+           potwierdzenie.innerHTML='Składanie zamówienia...'
+            fetch(BACKEND,{
+                method: "POST",
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({produkt,ilosc})
+            })
+            .then(response => {if(response.status === 200) potwierdzenie.innerHTML='Złożono zamówienie!'; else {
+                response.json().then(res => potwierdzenie.innerHTML=res.msg)} })
+            .catch(err => potwierdzenie.innerHTML='Błąd podczas składania zamówienia')
+            .finally(() => setTimeout(()=>potwierdzenie.innerHTML='',3000))
+        }
+    </script>
+</body>
+</html>
