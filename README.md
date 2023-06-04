@@ -7,6 +7,7 @@ Simple app that allows to make/cancel orders and check ordered products
 * [![HTML][HTML.img]][HTML-url]
 * [![JavaScript][JavaScript.img]][JavaScript-url]
 * [![Express][Express.js]][Express-url]
+* [![MongoDB][Mongo.db]][Mongo-url]
 
 ###Screens
 ![obraz](https://github.com/Marcelinc/Baker_app_expressjs/assets/82237491/899a6aba-7e12-4ebe-be97-77cc0fb7ba4b)
@@ -24,3 +25,5 @@ Simple app that allows to make/cancel orders and check ordered products
 [JavaScript-url]: #
 [Express.js]: https://img.shields.io/badge/Express.js-404D59?style=for-the-badge
 [Express-url]: https://expressjs.com/
+[Mongo.db]: https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white
+[Mongo-url]:https://www.mongodb.com/
