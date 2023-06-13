@@ -23,7 +23,7 @@ Simple app that allows to make/cancel orders and check ordered products
 [HTML-url]: #
 [JavaScript.img]: https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black
 [JavaScript-url]: #
-[Express.js]: https://img.shields.io/badge/Express.js-404D59?style=for-the-badge
+[Express.js]: https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white
 [Express-url]: https://expressjs.com/
 [Mongo.db]: https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white
 [Mongo-url]:https://www.mongodb.com/
